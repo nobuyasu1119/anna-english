@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anna English</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#ff6f61">
+
+<style>
+body {
+  margin:0;
+  font-family: sans-serif;
+  background: linear-gradient(135deg,#ff9a9e,#fad0c4);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+.card{
+  background:white;
+  width:90%;
+  max-width:420px;
+  padding:20px;
+  border-radius:20px;
+  text-align:center;
+  box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+.english{font-size:24px;font-weight:bold;margin:15px 0;}
+.japanese{color:gray;margin-bottom:15px;}
+button{
+  width:100%;
+  padding:12px;
+  margin:6px 0;
+  border:none;
+  border-radius:12px;
+  font-size:16px;
+}
+.speak{background:#4CAF50;color:white;}
+.next{background:#ff6f61;color:white;}
+.back{background:#2196F3;color:white;}
+.character{
+  font-size:40px;
+  margin-bottom:10px;
+}
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="character" id="character"></div>
+  <h2>Day <span id="dayNumber"></span></h2>
+  <div class="english" id="english"></div>
+  <div class="japanese" id="japanese"></div>
+
+  <button class="speak" onclick="speakPhrase()">🔊 Speak</button>
+  <button class="next" onclick="nextDay()">Next Day</button>
+  <button class="back" onclick="prevDay()">⬅ Back</button>
+</div>
+
+<script>
+const characters = ["👑✨","🩰🌸","💃🔥","🦄🌈","🌟🎀","🧚‍♀️✨"];
+
+const phrases = [
+["I'm ready!","準備できたよ！"],
+["Let's go!","いこう！"],
+["Watch me!","見てて！"],
+["I can do it!","できる！"],
+["Good job!","よくやった！"],
+["Again!","もう一回！"],
+["That was fun!","楽しかった！"],
+["I'm happy!","うれしい！"],
+["Come on!","さあ行こう！"],
+["Wait a minute.","ちょっと待って。"],
+["No problem!","問題ないよ！"],
+["Thank you!","ありがとう！"],
+["You're welcome.","どういたしまして。"],
+["Let's try!","やってみよう！"],
+["I like it!","それ好き！"],
+["That's cool!","かっこいい！"],
+["Really?","ほんと？"],
+["Wow!","わあ！"],
+["I'm tired.","つかれた。"],
+["See you!","またね！"]
+];
+
+while(phrases.length<100){
+  phrases.push(["Keep going!","そのまま続けて！"]);
+}
+
+let currentDay = localStorage.getItem("annaDay")
+ ? parseInt(localStorage.getItem("annaDay")) : 0;
+
+function showPhrase(){
+  document.getElementById("dayNumber").textContent=currentDay+1;
+  document.getElementById("english").textContent=phrases[currentDay][0];
+  document.getElementById("japanese").textContent=phrases[currentDay][1];
+  document.getElementById("character").textContent=
+    characters[Math.floor(Math.random()*characters.length)];
+}
+
+function nextDay(){
+  if(currentDay<99){
+    currentDay++;
+    localStorage.setItem("annaDay",currentDay);
+    showPhrase();
+  }
+}
+
+function prevDay(){
+  if(currentDay>0){
+    currentDay--;
+    localStorage.setItem("annaDay",currentDay);
+    showPhrase();
+  }
+}
+
+function speakPhrase(){
+  const utter=new SpeechSynthesisUtterance(phrases[currentDay][0]);
+  utter.lang="en-US";
+  speechSynthesis.speak(utter);
+}
+
+showPhrase();
+
+// service worker登録
+if("serviceWorker" in navigator){
+  navigator.serviceWorker.register("sw.js");
+}
+</script>
+
+</body>
+</html>

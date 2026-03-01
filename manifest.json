@@ -1,0 +1,15 @@
+{
+  "name": "Anna English",
+  "short_name": "AnnaEng",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#ff9a9e",
+  "theme_color": "#ff6f61",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
